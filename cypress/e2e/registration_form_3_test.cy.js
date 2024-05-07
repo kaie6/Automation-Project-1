@@ -4,6 +4,15 @@ beforeEach(() => {
 
 import {faker} from '@faker-js/faker'
 
+const invalidEmails = [
+    'invalidemail@',              // Missing domain part
+    'invalidemail@example.',      // Domain ends with dot
+    'invalidemail@.com',          // Missing domain name
+    'invalidemail.com',           // Missing "@" symbol
+    'invalidemail@eee@eee.com',    // Multiple "@" symbols
+    '@example.com',               // Missing first part
+]
+
 /*
 BONUS TASK: add visual tests for registration form 3
 Task list:
@@ -127,10 +136,14 @@ it.only('Verify that checkboxes have correct content and links', () => {
 })
 
 it.only('Check the email format', () => {
-    const invalidEmails = [
 
-    ]
-
+        // Test the array of invalid emails
+        invalidEmails.forEach(email => {  
+          cy.log(email)
+          cy.get('[name="email"]').clear().type(email).blur()
+          cy.get('#emailAlert').should('be.visible').and('contain', 'Invalid email address.')
+        })
+    
 
 })
 
